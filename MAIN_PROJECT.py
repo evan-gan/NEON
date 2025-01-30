@@ -1,3 +1,5 @@
+#TODO: Make clock repopulate missing pixels when started not on the hour
+
 import random
 import time
 import board
@@ -103,7 +105,9 @@ def newTimePixel(grid:displayio.Bitmap):
     Args:
         grid: The bitmap to add the pixel to.
     """
-    grid[random.randint(0, grid.width-1),0] = random.randint(1,7)  # Drop a pixel
+    current_second = get_current_time()[1]
+    pixelColor = int(current_second/(60*10))+1
+    grid[random.randint(0, grid.width-1),0] = random.randint(pixelColor, pixelColor+1)  # Drop a pixel
 
 def dropPixelsAndRefresh(source_grid: displayio.Bitmap, target_grid: displayio.Bitmap, target_group: displayio.Group):
     """Process one frame of animation and swap display groups."""
