@@ -156,7 +156,6 @@ while True:
         hour = current_hour
 
 
-# Note to Cheru or whomever is reviewing this:
 # I used the game of life demo code to start off of and then paired it down to what I needed. 
 # Github copiolet added some of the nice documentation that I decided to keep do more of myself. 
 # It took me a while to figure out a good way to display time that both looked nice and is understandable if you know how it works.
