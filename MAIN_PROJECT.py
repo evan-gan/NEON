@@ -90,12 +90,22 @@ def dropPixels(origonalGrid: displayio.Bitmap, newGrid:displayio.Bitmap):
         origonalGrid: The bitmap that is being dropped on the `newGrid`.
         newGrid: The bitmap that the dropped pixels are being copied to.
     """
+    # # Landscape dropper:
+    # # Start from bottom row and work up to avoid multiple drops in one pass
+    # for row in range(newGrid.height-1, -1, -1):  # Start from bottom row, go up
+    #     for col in range(0, newGrid.width):  # Left to right
+    #         newGrid[col, row] = origonalGrid[col, row]
+    #         if newGrid[col, row] != 0 and row < newGrid.height-1 and newGrid[col, row+1] == 0:
+    #             newGrid[col, row+1] = newGrid[col, row]
+    #             newGrid[col, row] = 0
+
+    # Portrait dropper:
     # Start from bottom row and work up to avoid multiple drops in one pass
-    for row in range(newGrid.height-1, -1, -1):  # Start from bottom row, go up
-        for col in range(0, newGrid.width):  # Left to right
+    for col in range(newGrid.width-1, -1, -1):  # Start from rightmost column, go left
+        for row in range(0, newGrid.height):  # Top to bottom
             newGrid[col, row] = origonalGrid[col, row]
-            if newGrid[col, row] != 0 and row < newGrid.height-1 and newGrid[col, row+1] == 0:
-                newGrid[col, row+1] = newGrid[col, row]
+            if newGrid[col, row] != 0 and col < newGrid.width-1 and newGrid[col+1, row] == 0:
+                newGrid[col+1, row] = newGrid[col, row]
                 newGrid[col, row] = 0
 
 def newTimePixel(grid:displayio.Bitmap):
@@ -107,7 +117,11 @@ def newTimePixel(grid:displayio.Bitmap):
     """
     current_second = get_current_time()[1]
     pixelColor = int(current_second/(60*10))+1
-    grid[random.randint(0, grid.width-1),0] = random.randint(pixelColor, pixelColor+1)  # Drop a pixel
+    # Landscape mode:
+    # grid[random.randint(0, grid.width-1),0] = random.randint(pixelColor, pixelColor+1)  # Drop a pixel
+
+    # Portrait mode:
+    grid[0, random.randint(0, grid.height-1)] = random.randint(pixelColor, pixelColor+1)  # Drop a pixel
 
 def dropPixelsAndRefresh(source_grid: displayio.Bitmap, target_grid: displayio.Bitmap, target_group: displayio.Group):
     """Process one frame of animation and swap display groups."""
